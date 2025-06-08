@@ -193,6 +193,7 @@
     <Content Include="assets\pages\widget\amchart\serial.min.js" />
     <Content Include="assets\pages\widget\amchart\worldLow.js" />
     <Content Include="assets\pages\widget\amchart\worldLow.min.js" />
+    <Content Include="Database\create-database.sql" />
     <Content Include="Global.asax" />
     <Content Include="Images\Category\0d2dcf09-7359-43bc-8025-2e2a1235015f.jpg" />
     <Content Include="Images\Category\1b1b2747-a858-41be-8210-f990a84f755f.jpg" />

@@ -18,7 +18,7 @@ namespace Onni.Admin
             if (!IsPostBack)
             {
                 Session["breadCrum"] = "Бренды";
-                if (Session["Admin"] == null)
+                if (Session["Manager"] == null)
                 {
                     Response.Redirect("../User/Login.aspx");
                 }

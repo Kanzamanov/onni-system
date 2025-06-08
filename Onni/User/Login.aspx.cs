@@ -25,9 +25,9 @@ namespace Onni.User
         }
         protected void btnLogin_Click(object sender, EventArgs e)
         {
-            if (txtUsername.Text.Trim() == "Admin" && txtPassword.Text.Trim() == "123")
+            if (txtUsername.Text.Trim() == "Manager" && txtPassword.Text.Trim() == "12345")
             {
-                Session["admin"] = txtUsername.Text.Trim();
+                Session["Manager"] = txtUsername.Text.Trim();
                 Response.Redirect("../Admin/Dashboard.aspx");
                 return;
             }

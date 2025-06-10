@@ -35,12 +35,12 @@
 
                         <!-- Username -->
                         <div class="mb-3">
-                            <asp:RequiredFieldValidator ID="rfvUsername" runat="server" ErrorMessage="Требуется имя пользователя"
+                            <asp:RequiredFieldValidator ID="rfvUsername" runat="server" ErrorMessage="Требуется логин"
                                 ControlToValidate="txtUsername" ForeColor="Red" Display="Dynamic" SetFocusOnError="true"></asp:RequiredFieldValidator>
                             <asp:RegularExpressionValidator ID="revUsername" runat="server" ControlToValidate="txtUsername"
-                                ValidationExpression="^[a-zA-Z0-9_]{3,20}$" ErrorMessage="Имя пользователя должно состоять из латинских символов"
+                                ValidationExpression="^[a-zA-Z0-9_]{3,20}$" ErrorMessage="Логин должен состоять из латинских символов"
                                 ForeColor="Red" Display="Dynamic"></asp:RegularExpressionValidator>
-                            <asp:TextBox ID="txtUsername" runat="server" CssClass="form-control" placeholder="Введите имя пользователя"
+                            <asp:TextBox ID="txtUsername" runat="server" CssClass="form-control" placeholder="Введите логин"
                                 ToolTip="Username"></asp:TextBox>
                         </div>
 
@@ -55,7 +55,7 @@
 
                         <!-- Login Button -->
                         <div class="text-center mt-4">
-                            <asp:Button ID="btnLogin" runat="server" Text="Авторизоваться" CssClass="site-btn"
+                            <asp:Button ID="btnLogin" runat="server" Text="Войти" CssClass="site-btn"
                                 OnClick="btnLogin_Click" />
                         </div>
 

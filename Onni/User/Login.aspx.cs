@@ -25,7 +25,7 @@ namespace Onni.User
         }
         protected void btnLogin_Click(object sender, EventArgs e)
         {
-            if (txtUsername.Text.Trim() == "Manager" && txtPassword.Text.Trim() == "12345")
+            if (txtUsername.Text.Trim() == "Manager" && txtPassword.Text.Trim() == "2025")
             {
                 Session["Manager"] = txtUsername.Text.Trim();
                 Response.Redirect("../Admin/Dashboard.aspx");
@@ -61,7 +61,7 @@ namespace Onni.User
             else
             {
                 lblMsg.Visible = true;
-                lblMsg.Text = "Недействительные учетные данные..!";
+                lblMsg.Text = "Неверный логин или пароль.";
                 lblMsg.CssClass = "alert alert-danger";
             }
         }

@@ -467,6 +467,9 @@
     <Compile Include="User\User.Master.designer.cs">
       <DependentUpon>User.Master</DependentUpon>
     </Compile>
+    <Compile Include="User\UserHandler.ashx.cs">
+      <DependentUpon>UserHandler.ashx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Admin\Admin.Master" />
@@ -517,6 +520,7 @@
     <Content Include="TemplateFiles\Source\SlickNav-master.zip" />
     <Content Include="User\User.Master" />
     <Content Include="TemplateFiles\fonts\ARIAL.TTF" />
+    <Content Include="User\UserHandler.ashx" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

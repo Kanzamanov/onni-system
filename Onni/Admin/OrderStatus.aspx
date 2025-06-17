@@ -38,14 +38,14 @@
                                                             <table class="table data-table-export table-hover nowrap">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th class="table-plus">№ заказа</th>
-                                                                        <th>Дата заказа</th>
-                                                                        <th>Статус</th>
-                                                                        <th>Наименование товара</th>
-                                                                        <th>Количество</th>
-                                                                        <th>Общая сумма</th>
-                                                                        <th>Способ оплаты</th>
-                                                                        <th class="datatable-nosort">Изменить</th>
+                                                                        <th class="table-plus">№ заказа:</th>
+                                                                        <th>Дата заказа:</th>
+                                                                        <th>Статус:</th>
+                                                                        <th>Наименование товара:</th>
+                                                                        <th>Количество:</th>
+                                                                        <th>Общая сумма:</th>
+                                                                        <th>Способ оплаты:</th>
+                                                                        <th class="datatable-nosort">Действие:</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
@@ -79,7 +79,7 @@
                                                                 <td>
                                                                     <asp:LinkButton ID="lnkEdit" runat="server"
                                                                         CssClass="badge badge-primary"
-                                                                        ToolTip="Редактировать детали заказа"
+                                                                        ToolTip="Обновить статус заказа"
                                                                         CommandArgument='<%# Eval("OrderItemId") %>' CommandName="edit"
                                                                         CausesValidation="false">
                                                                         <i class="fas fa-pen"></i>

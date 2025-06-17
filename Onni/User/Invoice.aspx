@@ -68,7 +68,7 @@
             <div class="row mt-4">
                 <div class="col-lg-4 offset-lg-4">
                     <asp:LinkButton ID="lbDownloadInvoice" runat="server" CssClass="primary-btn w-100 text-center" OnClick="lbDownloadInvoice_Click">
-                        <i class="fa fa-file-pdf-o mr-2"></i> СКАЧАТЬ ЧЕК
+                        <i class="fa fa-file-pdf-o mr-2"></i> СКАЧАТЬ
                     </asp:LinkButton>
                 </div>
             </div>

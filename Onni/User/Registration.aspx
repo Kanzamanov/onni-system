@@ -37,7 +37,7 @@
                             <asp:RegularExpressionValidator ID="revName" runat="server" ErrorMessage="Имя должно состоять только из символов."
                                 ForeColor="Red" Display="Dynamic" SetFocusOnError="true" ValidationExpression="^[a-zA-Zа-яА-ЯёЁ\s]+$"
                                 ControlToValidate="txtName"></asp:RegularExpressionValidator>
-                            <asp:TextBox ID="txtName" runat="server" CssClass="form-control" placeholder="Введите полное имя"
+                            <asp:TextBox ID="txtName" runat="server" CssClass="form-control" placeholder="Имя"
                                 ToolTip="Full Name"></asp:TextBox>
                         </div>
 
@@ -48,7 +48,7 @@
                             <asp:RegularExpressionValidator ID="revUsername" runat="server" ControlToValidate="txtUsername"
                                 ValidationExpression="^[a-zA-Z0-9_]{3,20}$" ErrorMessage="Имя пользователя должно состоять из латинских символов"
                                 ForeColor="Red" Display="Dynamic"></asp:RegularExpressionValidator>
-                            <asp:TextBox ID="txtUsername" runat="server" CssClass="form-control" placeholder="Введите имя пользователя"
+                            <asp:TextBox ID="txtUsername" runat="server" CssClass="form-control" placeholder="Логин"
                                 ToolTip="Username"></asp:TextBox>
                         </div>
 
@@ -57,7 +57,7 @@
                             <asp:RequiredFieldValidator ID="rfvEmail" runat="server" ErrorMessage="Требуется электронная почта"
                                 ControlToValidate="txtEmail" ForeColor="Red" Display="Dynamic" SetFocusOnError="true">
                             </asp:RequiredFieldValidator>
-                            <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control" placeholder="Введите адрес электронной почты"
+                            <asp:TextBox ID="txtEmail" runat="server" CssClass="form-control" placeholder="Email"
                                 ToolTip="Email" TextMode="Email"></asp:TextBox>
                         </div>
 
@@ -65,7 +65,7 @@
                         <div class="mb-3">
                             <!-- Обязательность -->
                             <asp:RequiredFieldValidator ID="rfvPhoneNumber" runat="server" ControlToValidate="txtPhoneNumber"
-                                ErrorMessage="Введите номер телефона" ForeColor="Red" Display="Dynamic" SetFocusOnError="true">
+                                ErrorMessage="Номер телефона" ForeColor="Red" Display="Dynamic" SetFocusOnError="true">
                             </asp:RequiredFieldValidator>
                             <!-- Ровно 9 цифр -->
                             <asp:RegularExpressionValidator ID="revPhoneNumber" runat="server" ControlToValidate="txtPhoneNumber"
@@ -86,7 +86,7 @@
                             <asp:RequiredFieldValidator ID="rfvAddress" runat="server" ErrorMessage="Требуется адрес"
                                 ControlToValidate="txtAddress"
                                 ForeColor="Red" Display="Dynamic" SetFocusOnError="true"></asp:RequiredFieldValidator>
-                            <asp:TextBox ID="txtAddress" runat="server" CssClass="form-control" placeholder="Введите адрес"
+                            <asp:TextBox ID="txtAddress" runat="server" CssClass="form-control" placeholder="Адрес"
                                 ToolTip="Address" TextMode="MultiLine"></asp:TextBox>
                         </div>
 
@@ -95,7 +95,7 @@
                             <asp:RequiredFieldValidator ID="rfvPassword" runat="server" ErrorMessage="Требуется пароль"
                                 ControlToValidate="txtPassword" ForeColor="Red" Display="Dynamic" SetFocusOnError="true">
                             </asp:RequiredFieldValidator>
-                            <asp:TextBox ID="txtPassword" runat="server" CssClass="form-control" placeholder="Введите пароль"
+                            <asp:TextBox ID="txtPassword" runat="server" CssClass="form-control" placeholder="Пароль"
                                 ToolTip="Password" TextMode="Password"></asp:TextBox>
                         </div>
 
@@ -108,7 +108,7 @@
                         <!-- Already Registered -->
                         <div class="text-center mt-2">
                             <asp:Label ID="lblAlreadyUser" runat="server"
-                                Text="Уже зарегистрированы? <a href='Login.aspx' class='badge badge-info'>Войти здесь...</a>" />
+                                Text="Уже зарегистрированы? <a href='Login.aspx' class='badge badge-info'>Войти</a>" />
                         </div>
                     </div>
                 </div>

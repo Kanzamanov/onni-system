@@ -40,7 +40,7 @@
                             <asp:RegularExpressionValidator ID="revUsername" runat="server" ControlToValidate="txtUsername"
                                 ValidationExpression="^[a-zA-Z0-9_]{3,20}$" ErrorMessage="Логин должен состоять из латинских символов"
                                 ForeColor="Red" Display="Dynamic"></asp:RegularExpressionValidator>
-                            <asp:TextBox ID="txtUsername" runat="server" CssClass="form-control" placeholder="Введите логин"
+                            <asp:TextBox ID="txtUsername" runat="server" CssClass="form-control" placeholder="Логин"
                                 ToolTip="Username"></asp:TextBox>
                         </div>
 
@@ -49,7 +49,7 @@
                             <asp:RequiredFieldValidator ID="rfvPassword" runat="server" ErrorMessage="Требуется пароль"
                                 ControlToValidate="txtPassword" ForeColor="Red" Display="Dynamic" SetFocusOnError="true">
                             </asp:RequiredFieldValidator>
-                            <asp:TextBox ID="txtPassword" runat="server" CssClass="form-control" placeholder="Введите пароль"
+                            <asp:TextBox ID="txtPassword" runat="server" CssClass="form-control" placeholder="Пароль"
                                 ToolTip="Password" TextMode="Password"></asp:TextBox>
                         </div>
 
@@ -62,7 +62,7 @@
                         <!-- Already Login -->
                         <div class="text-center mt-2">
                             <asp:Label ID="lblAlreadyUser" runat="server"
-                                Text="Новый пользователь? <a href='Registration.aspx' class='badge badge-info'>Зарегистрируйтесь здесь...</a>" />
+                                Text="Не зарегистрированы? <a href='Registration.aspx' class='badge badge-info'>Создать аккаунт</a>" />
                         </div>
                     </div>
                 </div>

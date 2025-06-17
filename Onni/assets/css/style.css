@@ -1,4 +1,4 @@
-/**
+﻿/**
 
 Template Name: GURU Able Admin Template
 Author: CodedThemes
@@ -4060,6 +4060,12 @@ table tbody .border-bottom-info td {
 .header-navbar {
   min-height: 80px;
   padding: 0; }
+
+.navbar-logo {
+    background-color: #7fad39 !important; /* зелёный Ogani */
+}
+
+
   .header-navbar .navbar-wrapper .navbar-logo {
     position: relative;
     display: flex;

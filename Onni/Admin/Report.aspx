@@ -30,7 +30,7 @@
                                                 <asp:TextBox ID="txtToDate" runat="server" TextMode="Date" CssClass="form-control"></asp:TextBox>
                                             </div>
                                             <div class="form-group col-md-4">
-                                                <asp:Button ID="btnSearch" runat="server" Text="Поиск" CssClass="btn btn-primary mt-md-4"
+                                                <asp:Button ID="btnSearch" runat="server" Text="Показать" CssClass="btn btn-primary mt-md-4"
                                                     OnClick="btnSearch_Click" />
                                             </div>
                                         </div>
@@ -46,12 +46,12 @@
                                                         <table class="table data-table-export table-hover nowrap">
                                                             <thead>
                                                                 <tr>
-                                                                    <th class="table-plus">№</th>
-                                                                    <th>Дата продажи</th>
-                                                                    <th>Наименование товара</th>
-                                                                    <th>Объем продажи</th>
-                                                                    <th>Стоимость 1 ед.</th>
-                                                                    <th>Суммарная стоимость</th>
+                                                                    <th class="table-plus">№:</th>
+                                                                    <th>Дата продажи:</th>
+                                                                    <th>Наименование товара:</th>
+                                                                    <th>Кол-во:</th>
+                                                                    <th>Стоимость 1 ед:</th>
+                                                                    <th>Общая стоимость:</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>

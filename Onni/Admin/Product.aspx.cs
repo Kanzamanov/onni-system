@@ -36,29 +36,21 @@ namespace Onni.Admin
         }
         protected void btnAddOrUpdate_Click(object sender, EventArgs e)
         {
-            // ------------------------ кусок btnAddOrUpdate_Click ------------------------
             int productId = Convert.ToInt32(hdnId.Value);
             string mode = hdnMode.Value;
-
-            if (mode == "SELL")          // ← та самая ветка
+            if (mode == "SELL")          
             {
                 int qtyToSell = Convert.ToInt32(txtQuantity.Text.Trim());
-
-                /* ── 1. проверяем остаток ─────────────────────────────────────────── */
                 con = new SqlConnection(Connection.GetConnectionString());
-
                 SqlCommand getCmd = new SqlCommand("Product_Crud", con);
                 getCmd.Parameters.AddWithValue("@Action", "GETBYID");
                 getCmd.Parameters.AddWithValue("@ProductId", productId);
                 getCmd.CommandType = CommandType.StoredProcedure;
-
                 sda = new SqlDataAdapter(getCmd);
                 dt = new DataTable();
                 sda.Fill(dt);
-
                 int currentQty = Convert.ToInt32(dt.Rows[0]["Quantity"]);
-                decimal unitPrice = Convert.ToDecimal(dt.Rows[0]["Price"]);   // цена понадобится ниже
-
+                decimal unitPrice = Convert.ToDecimal(dt.Rows[0]["Price"]);   
                 if (qtyToSell <= 0 || qtyToSell > currentQty)
                 {
                     lblMsg.Visible = true;
@@ -66,41 +58,32 @@ namespace Onni.Admin
                     lblMsg.CssClass = "alert alert-danger";
                     return;
                 }
-
-                /* ── 2. готовим команду на списание ──────────────────────────────── */
                 SqlCommand updateCmd = new SqlCommand("Product_Crud", con);
                 updateCmd.Parameters.AddWithValue("@Action", "QTYUPDATE");
                 updateCmd.Parameters.AddWithValue("@ProductId", productId);
                 updateCmd.Parameters.AddWithValue("@Quantity", currentQty - qtyToSell);
                 updateCmd.CommandType = CommandType.StoredProcedure;
-
-                /* ── 3. транзакция: списать + Quick_POSSale ───────────────────────── */
                 SqlTransaction tran = null;
-
                 try
                 {
                     con.Open();
                     tran = con.BeginTransaction();
-
                     updateCmd.Transaction = tran;
-                    updateCmd.ExecuteNonQuery();                 // списали остаток
-
+                    updateCmd.ExecuteNonQuery();      
                     using (SqlCommand saleCmd = new SqlCommand("Quick_POSSale", con, tran))
                     {
                         saleCmd.CommandType = CommandType.StoredProcedure;
                         saleCmd.Parameters.AddWithValue("@ProductId", productId);
                         saleCmd.Parameters.AddWithValue("@Qty", qtyToSell);
                         saleCmd.Parameters.AddWithValue("@UnitPrice", unitPrice);
-                        saleCmd.ExecuteNonQuery();                    // занесли продажу
+                        saleCmd.ExecuteNonQuery();                    
                     }
-
                     tran.Commit();
-
                     lblMsg.Visible = true;
                     lblMsg.Text = "Продажа успешно зарегистрирована!";
                     lblMsg.CssClass = "alert alert-success";
-                    getProducts();   // обновляем таблицу
-                    clear();         // сбрасываем форму
+                    getProducts();   
+                    clear();         
                 }
                 catch (Exception ex)
                 {
@@ -110,35 +93,27 @@ namespace Onni.Admin
                     lblMsg.CssClass = "alert alert-danger";
                 }
                 finally { con.Close(); }
-
-                return;   // важный выход, чтобы не провалиться в код «добавить/обновить»
+                return;   
             }
-
-            // Обычное добавление или обновление товара
             string actionName = string.Empty, imagePath = string.Empty, fileExtension = string.Empty;
             bool isValidToExecute = false;
-
             con = new SqlConnection(Connection.GetConnectionString());
             cmd = new SqlCommand("Product_Crud", con);
             cmd.Parameters.AddWithValue("@Action", productId == 0 ? "INSERT" : "UPDATE");
             cmd.Parameters.AddWithValue("@ProductId", productId);
             cmd.Parameters.AddWithValue("@Name", txtName.Text.Trim());
             cmd.Parameters.AddWithValue("@Description", txtDescription.Text.Trim());
-
             string priceText = txtPrice.Text.Replace(",", ".");
             decimal price = Convert.ToDecimal(priceText, CultureInfo.InvariantCulture);
             cmd.Parameters.AddWithValue("@Price", price);
             cmd.Parameters.AddWithValue("@Quantity", txtQuantity.Text.Trim());
             cmd.Parameters.AddWithValue("@CategoryId", ddlCategories.SelectedValue);
             cmd.Parameters.AddWithValue("@BrandId", ddlBrands.SelectedValue);
-
             cmd.Parameters.AddWithValue("@ExpirationDate",
                 string.IsNullOrEmpty(txtExpirationDate.Text)
                 ? (object)DBNull.Value
                 : DateTime.ParseExact(txtExpirationDate.Text, "yyyy-MM-dd", CultureInfo.InvariantCulture));
-
             cmd.Parameters.AddWithValue("@IsActive", cbIsActive.Checked);
-
             if (fuProductImage.HasFile)
             {
                 if (Utils.IsValidExtension(fuProductImage.FileName))
@@ -162,7 +137,6 @@ namespace Onni.Admin
             {
                 isValidToExecute = true;
             }
-
             if (isValidToExecute)
             {
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -189,7 +163,6 @@ namespace Onni.Admin
                 }
             }
         }
-
         private void getProducts()
         {
             con = new SqlConnection(Connection.GetConnectionString());
@@ -202,7 +175,6 @@ namespace Onni.Admin
             rProduct.DataSource = dt;
             rProduct.DataBind();
         }
-
         private void clear()
         {
             txtName.Text = string.Empty;
@@ -214,7 +186,6 @@ namespace Onni.Admin
             cbIsActive.Checked = false;
             hdnId.Value = "0";
             btnAddOrUpdate.Text = "Добавить";
-            imgProduct.ImageUrl = String.Empty;
             txtExpirationDate.Text = string.Empty;
 
             hdnMode.Value = "NORMAL";
@@ -228,12 +199,17 @@ namespace Onni.Admin
             fuProductImage.Enabled = true;
 
         }
+        public string Truncate(object value, int maxLength)
+        {
+            string input = value?.ToString();
+            if (string.IsNullOrEmpty(input)) return string.Empty;
+            return input.Length <= maxLength ? input : input.Substring(0, maxLength) + "...";
+        }
 
         protected void btnClear_Click(object sender, EventArgs e)
         {
             clear();
         }
-
         protected void rProduct_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
             lblMsg.Visible = false;
@@ -254,10 +230,6 @@ namespace Onni.Admin
                 ddlCategories.SelectedValue = dt.Rows[0]["CategoryId"].ToString();
                 ddlBrands.SelectedValue = dt.Rows[0]["BrandId"].ToString();
                 cbIsActive.Checked = Convert.ToBoolean(dt.Rows[0]["IsActive"]);
-                imgProduct.ImageUrl = string.IsNullOrEmpty(dt.Rows[0]["ImageUrl"].ToString()) ?
-                    "../Images/No_image.png" : "../" + dt.Rows[0]["ImageUrl"].ToString();
-                imgProduct.Height = 200;
-                imgProduct.Width = 200;
                 hdnId.Value = dt.Rows[0]["ProductId"].ToString();
                 btnAddOrUpdate.Text = "Обновить";
                 LinkButton btn = e.Item.FindControl("lnkEdit") as LinkButton;
@@ -270,7 +242,6 @@ namespace Onni.Admin
                 cmd.Parameters.AddWithValue("@Action", "DELETE");
                 cmd.Parameters.AddWithValue("@ProductId", e.CommandArgument);
                 cmd.CommandType = CommandType.StoredProcedure;
-
                 try
                 {
                     con.Open();
@@ -278,7 +249,7 @@ namespace Onni.Admin
                     lblMsg.Visible = true;
                     lblMsg.Text = "Товар успешно удалён!";
                     lblMsg.CssClass = "alert alert-success";
-                    getProducts(); // Обновляет список категорий
+                    getProducts(); 
                 }
                 catch (Exception ex)
                 {
@@ -300,24 +271,16 @@ namespace Onni.Admin
                 sda = new SqlDataAdapter(cmd);
                 dt = new DataTable();
                 sda.Fill(dt);
-
-                // Заполняем только нужные поля, но делаем их ReadOnly
                 txtName.Text = dt.Rows[0]["Name"].ToString();
                 txtDescription.Text = dt.Rows[0]["Description"].ToString();
                 txtPrice.Text = dt.Rows[0]["Price"].ToString();
-                txtQuantity.Text = "1"; // по умолчанию продаем 1
+                txtQuantity.Text = "1"; 
                 ddlCategories.SelectedValue = dt.Rows[0]["CategoryId"].ToString();
                 ddlBrands.SelectedValue = dt.Rows[0]["BrandId"].ToString();
                 cbIsActive.Checked = Convert.ToBoolean(dt.Rows[0]["IsActive"]);
                 txtExpirationDate.Text = Convert.ToDateTime(dt.Rows[0]["ExpirationDate"]).ToString("yyyy-MM-dd");
-                imgProduct.ImageUrl = string.IsNullOrEmpty(dt.Rows[0]["ImageUrl"].ToString()) ?
-                    "../Images/No_image.png" : "../" + dt.Rows[0]["ImageUrl"].ToString();
-                imgProduct.Height = 200;
-                imgProduct.Width = 200;
                 hdnId.Value = dt.Rows[0]["ProductId"].ToString();
                 hdnMode.Value = "SELL";
-
-                // Делаем поля недоступными
                 txtName.Enabled = false;
                 txtDescription.Enabled = false;
                 txtPrice.Enabled = false;
@@ -326,12 +289,10 @@ namespace Onni.Admin
                 cbIsActive.Enabled = false;
                 txtExpirationDate.Enabled = false;
                 fuProductImage.Enabled = false;
-
                 btnAddOrUpdate.Text = "Продать";
             }
 
         }
-
         protected void rProduct_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
@@ -351,7 +312,7 @@ namespace Onni.Admin
                 if (Convert.ToInt32(lblQuantity.Text) <= 5)
                 {
                     lblQuantity.CssClass = "badge badge-danger";
-                    lblQuantity.ToolTip = "Осталось мало! Товар скоро закончится.";
+                    lblQuantity.ToolTip = "Низкий остаток товара";
                 }
                 Label lblExpirationDate = e.Item.FindControl("lblExpirationDate") as Label;
 
@@ -360,7 +321,7 @@ namespace Onni.Admin
                     if ((expDate - DateTime.Now).TotalDays <= 7)
                     {
                         lblExpirationDate.CssClass = "badge badge-danger";
-                        lblExpirationDate.ToolTip = "Скоро срок годности!";
+                        lblExpirationDate.ToolTip = "Срок годности скоро истекает";
                     }
                 }
             }

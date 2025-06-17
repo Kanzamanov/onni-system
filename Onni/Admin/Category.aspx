@@ -35,7 +35,7 @@
                                     <div class="row">
 
                                         <div class="col-sm-6 col-md-4 col-lg-4">
-                                            <h4 class="sub-title">Добавить или редактировать категорию</h4>
+                                            <h4 class="sub-title">Категории</h4>
                                             <div>
                                                 <div class="form-group">
                                                     <label>Название Категории</label>
@@ -69,10 +69,10 @@
                                                             <table class="table data-table-export table-hover nowrap">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th class="table-plus">Название</th>
-                                                                        <th>Статус</th>
-                                                                        <th>Дата создания</th>
-                                                                        <th class="datatable-nosort">Действия</th>
+                                                                        <th class="table-plus">Название:</th>
+                                                                        <th>Статус:</th>
+                                                                        <th>Дата создания:</th>
+                                                                        <th class="datatable-nosort">Действия:</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>

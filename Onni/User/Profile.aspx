@@ -183,7 +183,7 @@
                                                                     <td class="text-center">
                                                                         <span class='<%# Eval("Status").ToString() == "Delivered" ? "badge badge-success" :
                                                                                 Eval("Status").ToString() == "Cancelled" ? "badge badge-secondary" : "badge badge-warning" %>'>
-                                                                            <%# Eval("Status").ToString() == "Pending"    ? "В ожидании" :
+                                                                            <%# Eval("Status").ToString() == "Pending"    ? "В обработке" :
                                                                                     Eval("Status").ToString() == "Dispatched"? "Отправлен"  :
                                                                                     Eval("Status").ToString() == "Delivered" ? "Доставлен"  :"Отменён" %>
                                                                         </span>

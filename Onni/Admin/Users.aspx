@@ -41,13 +41,13 @@
                                                             <table class="table data-table-export table-hover nowrap">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th class="table-plus">№</th>
-                                                                        <th>ФИО</th>
-                                                                        <th>Имя пользователя</th>
-                                                                        <th>Электронная почта</th>
-                                                                        <th>Дата регистрации</th>
-                                                                        <th>Статус</th>
-                                                                        <th class="datatable-nosort">Действие</th>
+                                                                        <th class="table-plus">№:</th>
+                                                                        <th>ФИО:</th>
+                                                                        <th>Имя пользователя:</th>
+                                                                        <th>Электронная почта:</th>
+                                                                        <th>Дата регистрации:</th>
+                                                                        <th>Статус:</th>
+                                                                        <th class="datatable-nosort">Действие:</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>

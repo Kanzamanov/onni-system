@@ -13,20 +13,6 @@
         };
     </script>
 
-    <script>
-        function ImagePreview(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    $('#<%= imgBrand.ClientID %>').prop('src', e.target.result)
-                        .width(200)
-                        .height(200);
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-    </script>
-
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
@@ -70,9 +56,6 @@
                                                     &nbsp;
                                                     <asp:Button ID="btnClear" runat="server" Text="Очистить" CssClass="btn btn-primary" CausesValidation="false" OnClick="btnClear_Click" />
                                                 </div>
-                                                <div>
-                                                    <asp:Image ID="imgBrand" runat="server" CssClass="img-thumbnail" />
-                                                </div>
                                             </div>
                                         </div>
 
@@ -85,11 +68,11 @@
                                                             <table class="table data-table-export table-hover nowrap">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th class="table-plus">Название</th>
-                                                                        <th>Изображение</th>
-                                                                        <th>Статус</th>
-                                                                        <th>Дата создания</th>
-                                                                        <th class="datatable-nosort">Действия</th>
+                                                                        <th class="table-plus">Название:</th>
+                                                                        <th>Изображение:</th>
+                                                                        <th>Статус:</th>
+                                                                        <th>Дата создания:</th>
+                                                                        <th class="datatable-nosort">Действия:</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>

@@ -90,7 +90,6 @@ namespace Onni.Admin
                 }
             }
         }
-
         private void getBrands()
         {
             con = new SqlConnection(Connection.GetConnectionString());
@@ -110,7 +109,6 @@ namespace Onni.Admin
             cbIsActive.Checked = false;
             hdnId.Value = "0";
             btnAddOrUpdate.Text = "Добавить";
-            imgBrand.ImageUrl = string.Empty;
         }
 
         protected void btnClear_Click(object sender, EventArgs e)
@@ -134,10 +132,6 @@ namespace Onni.Admin
                 sda.Fill(dt);
                 txtName.Text = dt.Rows[0]["Name"].ToString();
                 cbIsActive.Checked = Convert.ToBoolean(dt.Rows[0]["IsActive"]);
-                imgBrand.ImageUrl = string.IsNullOrEmpty(dt.Rows[0]["ImageUrl"].ToString()) ?
-                    "../Images/No_image.png" : "../" + dt.Rows[0]["ImageUrl"].ToString();
-                imgBrand.Height = 200;
-                imgBrand.Width = 200;
                 hdnId.Value = dt.Rows[0]["BrandId"].ToString();
                 btnAddOrUpdate.Text = "Обновить";
                 LinkButton btn = e.Item.FindControl("lnkEdit") as LinkButton;
@@ -170,7 +164,6 @@ namespace Onni.Admin
                 }
             }
         }
-
         protected void rBrand_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)

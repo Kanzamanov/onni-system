@@ -6,7 +6,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
 
     <script>
-        /* For disappearing alert message */
         window.onload = function () {
             var seconds = 5;
             setTimeout(function () {
@@ -14,21 +13,6 @@
             }, seconds * 1000);
         };
     </script>
-
-    <script>
-        function ImagePreview(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    $('#<%= imgProduct.ClientID %>').prop('src', e.target.result)
-                        .width(200)
-                        .height(200);
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-    </script>
-
 
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
@@ -178,9 +162,6 @@
                                                     CausesValidation="false" OnClick="btnClear_Click" />
                                                 </div>
 
-                                                <div>
-                                                    <asp:Image ID="imgProduct" runat="server" CssClass="img-thumbnail" />
-                                                </div>
                                             </div>
                                         </div>
 
@@ -194,30 +175,30 @@
                                                             <table class="table data-table-export table-hover nowrap">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th class="table-plus">Название</th>
-                                                                        <th>Изображение</th>
-                                                                        <th>Цена</th>
-                                                                        <th>Количество</th>
-                                                                        <th>Срок годности</th>
-                                                                        <th>Категория</th>
-                                                                        <th>Бренд</th>
-                                                                        <th>Статус</th>
-                                                                        <th>Описание</th>
-                                                                        <th>Дата создания</th>
-                                                                        <th class="datatable-nosort">Действия</th>
+                                                                        <th class="table-plus">Название:</th>
+                                                                        <th>Изо-ние:</th>
+                                                                        <th>Цена:</th>
+                                                                        <th>Кол-во:</th>
+                                                                        <th>Срок годности:</th>
+                                                                        <th>Категория:</th>
+                                                                        <th>Бренд:</th>
+                                                                        <th>Статус:</th>
+                                                                        <th>Описание:</th>
+                                                                        <th>Дата создания:</th>
+                                                                        <th class="datatable-nosort">Действия:</th>
                                                                     </tr>
                                                                 </thead>
                                                                 <tbody>
                                                         </HeaderTemplate>
                                                         <ItemTemplate>
                                                             <tr>
-                                                                <td><%# Eval("Name") %></td>
+                                                                <td title='<%# Eval("Name") %>'><%# Truncate(Eval("Name"), 15) %></td>
 
                                                                 <td>
                                                                     <img alt="" width="40" src="<%# Utils.GetImageUrl( Eval("ImageUrl")) %>" />
                                                                 </td>
 
-                                                                <td><%# Eval("Price") %> сом</td>
+                                                                <td><%# string.Format("{0:0.##}", Eval("Price")) %> сом</td>
 
                                                                 <td>
                                                                     <asp:Label ID="lblQuantity" runat="server" Text='<%# Eval("Quantity") %>'>
@@ -237,7 +218,7 @@
                                                                     </asp:Label>
                                                                 </td>
 
-                                                                <td><%# Eval("Description") %></td>
+                                                                <td><%# Truncate(Eval("Description"), 50) %></td>
 
                                                                 <td><%# Eval("CreatedDate") %></td>
 

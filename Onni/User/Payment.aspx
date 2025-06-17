@@ -197,7 +197,7 @@
                                         <div class="card-footer">
                                             <asp:LinkButton ID="lbCardSubmit" runat="server" CssClass="subscribe btn btn-info btn-block shadow-sm"
                                                 ValidationGroup="card" OnClick="lbCardSubmit_Click">
-                                               Подтвердить оплату</asp:LinkButton>
+                                               Оплатить</asp:LinkButton>
                                         </div>
                                     </div>
                                 </div>

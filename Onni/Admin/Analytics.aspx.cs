@@ -11,19 +11,22 @@ namespace Onni.Admin
         {
             if (!IsPostBack)
             {
+                // Устанавливаем хлебную крошку навигации
                 Session["breadCrum"] = "Аналитика";
 
+                // Проверка, авторизован ли менеджер
                 if (Session["Manager"] == null)
                 {
                     Response.Redirect("../User/Login.aspx");
-                    return;              
+                    return;
                 }
-
             }
+
+            // Скрываем сообщение при первой загрузке
             lblMsg.Visible = false;
         }
 
-        // ▼ Заполняем отчёт
+        // ▼ Обработка изменения выбранного отчёта в выпадающем списке
         protected void ddlReport_SelectedIndexChanged(object sender, EventArgs e)
         {
             string action = ddlReport.SelectedValue;
@@ -35,26 +38,33 @@ namespace Onni.Admin
                 using (SqlCommand cmd = new SqlCommand("Analytics", con))
                 {
                     cmd.CommandType = CommandType.StoredProcedure;
+
+                    // Передаём выбранное действие в процедуру Analytics
                     cmd.Parameters.AddWithValue("@Action", action);
 
+                    // Если отчёт — ТОП-продажи или ТОП-клиенты — указываем лимит
                     bool needTop = action == "TOP_SELL" || action == "LEASTSELL" || action == "TOP_CUSTOMERS";
                     cmd.Parameters.Add("@Limit", SqlDbType.Int).Value = needTop ? 5 : (object)DBNull.Value;
 
+                    // Получаем данные из БД
                     DataTable dt = new DataTable();
                     new SqlDataAdapter(cmd).Fill(dt);
 
+                    // Очищаем старые столбцы перед добавлением новых
                     gvReport.Columns.Clear();
 
                     if (dt.Rows.Count > 0)
                     {
+                        // Динамически создаём столбцы для GridView на основе DataTable
                         foreach (DataColumn col in dt.Columns)
                         {
                             string colNameLower = col.ColumnName.ToLower();
 
-                            // скрываем ID, Status, IsActive
+                            // Пропускаем скрытые поля (ID, статус, флаги активности)
                             if (colNameLower.EndsWith("id") || colNameLower == "status" || colNameLower == "isactive")
                                 continue;
 
+                            // Создаём новый столбец
                             BoundField bf = new BoundField
                             {
                                 DataField = col.ColumnName,
@@ -63,35 +73,39 @@ namespace Onni.Admin
                             bf.HeaderStyle.HorizontalAlign = HorizontalAlign.Center;
                             bf.ItemStyle.HorizontalAlign = HorizontalAlign.Center;
 
-                            // Формат денег
+                            // Форматируем числовые значения как деньги (доход, сумма)
                             if (colNameLower == "totalrevenue" || colNameLower == "revenue" || colNameLower == "totalspent")
                                 bf.DataFormatString = "{0:N2}";
 
                             gvReport.Columns.Add(bf);
                         }
 
+                        // Привязываем данные к GridView
                         gvReport.DataSource = dt;
                         gvReport.DataBind();
                     }
                     else
                     {
+                        // Если данных нет — очищаем таблицу
                         gvReport.DataSource = null;
                         gvReport.DataBind();
                     }
 
+                    // Показываем сообщение, если нет данных
                     lblMsg.Visible = dt.Rows.Count == 0;
                     lblMsg.Text = dt.Rows.Count == 0 ? "Данных нет." : "";
                 }
             }
             catch (Exception ex)
             {
+                // Обработка исключений — показываем сообщение об ошибке
                 lblMsg.Visible = true;
                 lblMsg.Text = "Ошибка: " + ex.Message;
                 lblMsg.CssClass = "alert alert-danger";
             }
         }
 
-        // Перевод заголовков
+        // ▼ Перевод названий колонок из БД в понятные заголовки для таблицы
         private static string TranslateHeader(string column)
         {
             switch (column.ToLower())
@@ -107,9 +121,8 @@ namespace Onni.Admin
                 case "week": return "Неделя";
                 case "username": return "Покупатель";
                 case "totalspent": return "Сумма покупок";
-                default: return column;
+                default: return column; // по умолчанию оставляем оригинальное имя
             }
         }
-
     }
 }

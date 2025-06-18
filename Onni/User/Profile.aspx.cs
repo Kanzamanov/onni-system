@@ -11,37 +11,50 @@ namespace Onni.User
 {
     public partial class Profile : System.Web.UI.Page
     {
+        // Поля для работы с базой
         SqlConnection con;
         SqlCommand cmd;
         SqlDataAdapter sda;
         DataTable dt;
+       
+        // 1. Загрузка страницы профиля     
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
+                // Проверяем авторизацию
                 if (Session["userId"] == null)
                 {
                     Response.Redirect("Login.aspx");
                 }
                 else
                 {
+                    // Загружаем данные пользователя и историю покупок
                     getUserDetails();
                     getPurchaseHistory();
                 }
             }
         }
+
+        // 2. Детали пользователя (шапка профиля)
+        //    SELECT4PROFILE   ➜  процедура User_Crud
         void getUserDetails()
         {
             con = new SqlConnection(Connection.GetConnectionString());
             cmd = new SqlCommand("User_Crud", con);
-            cmd.Parameters.AddWithValue("@Action", "SELECT4PROFILE");
-            cmd.Parameters.AddWithValue("@UserId", Session["userId"]);
+            cmd.Parameters.AddWithValue("@Action", "SELECT4PROFILE");   // действие
+            cmd.Parameters.AddWithValue("@UserId", Session["userId"]);  // текущий пользователь
             cmd.CommandType = CommandType.StoredProcedure;
+
             sda = new SqlDataAdapter(cmd);
             dt = new DataTable();
             sda.Fill(dt);
+
+            // Привязываем Repeater rUserProfile
             rUserProfile.DataSource = dt;
             rUserProfile.DataBind();
+
+            // Сохраняем полезные данные в сессию
             if (dt.Rows.Count == 1)
             {
                 Session["name"] = dt.Rows[0]["Name"].ToString();
@@ -50,34 +63,42 @@ namespace Onni.User
             }
         }
 
+        // 3. История покупок (список платежей + заказов внутри каждого)
+        //    ORDHISTORY  ➜  процедура Invoice
         void getPurchaseHistory()
         {
-            int sr = 1;
+            int sr = 1;      // счётчик «№»
             con = new SqlConnection(Connection.GetConnectionString());
             cmd = new SqlCommand("Invoice", con);
             cmd.Parameters.AddWithValue("@Action", "ORDHISTORY");
             cmd.Parameters.AddWithValue("@UserId", Session["userId"]);
             cmd.CommandType = CommandType.StoredProcedure;
+
             sda = new SqlDataAdapter(cmd);
             dt = new DataTable();
             sda.Fill(dt);
+
+            // Добавляем колонку «SrNo», чтобы вывести порядковый номер
             dt.Columns.Add("SrNo", typeof(Int32));
             if (dt.Rows.Count > 0)
             {
                 foreach (DataRow dataRow in dt.Rows)
-                {
-                    dataRow["SrNo"] = sr;
-                    sr++;
-                }
+                    dataRow["SrNo"] = sr++;
             }
+
+            // Если покупок нет — показываем кастомный футер
             if (dt.Rows.Count == 0)
             {
                 rPurchaseHistory.FooterTemplate = null;
                 rPurchaseHistory.FooterTemplate = new CustomTemplate(ListItemType.Footer);
             }
+
             rPurchaseHistory.DataSource = dt;
             rPurchaseHistory.DataBind();
         }
+
+        // 4. Вложенный Repeater rOrders внутри rPurchaseHistory
+        //    Подгружаем товары конкретного платежа (INVOICBYID)
         protected void rPurchaseHistory_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
@@ -101,6 +122,8 @@ namespace Onni.User
             }
         }
 
+        // 5. Кнопка «Деактивировать аккаунт»
+        //    Ставит флаг IsBlocked=1 и завершает сессию
         protected void btnDeactivate_Click(object sender, EventArgs e)
         {
             if (Session["userId"] == null) return;
@@ -114,11 +137,13 @@ namespace Onni.User
                 cmd.ExecuteNonQuery();
             }
 
-            // разрываем сессию и уводим на заглушку
+            // Завершаем сессию и перенаправляем на страницу-подтверждение
             Session.Abandon();
-            Response.Redirect("Goodbye.aspx");   // простая страница «Аккаунт удалён»
+            Response.Redirect("Goodbye.aspx");
         }
 
+        // 6. Команда Repeater'а «Отменить» (кнопка Cancel в заказах)
+        //    Вызывает процедуру Invoice с действием CANCEL
         protected void rOrders_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
             if (e.CommandName == "cancel")
@@ -136,12 +161,12 @@ namespace Onni.User
                     cmd.ExecuteNonQuery();
                 }
 
-                // перерисовать историю
+                // Перерисовываем историю после отмены
                 getPurchaseHistory();
             }
         }
 
-        // Custom template class to add controls to the repeater's header, item and footer sections.
+        // 7. CustomTemplate — вставка футера «Нет покупок»
         private sealed class CustomTemplate : ITemplate
         {
             private ListItemType ListItemType { get; set; }
@@ -155,7 +180,9 @@ namespace Onni.User
             {
                 if (ListItemType == ListItemType.Footer)
                 {
-                    var footer = new LiteralControl("<tr><td><b>Пока что у вас нет покупок.</b> <a href='Catalog.aspx' class='badge badge-info ml-2'>Посмотреть каталог</a></td></tr></tbody></table>");
+                    var footer = new LiteralControl(
+                        "<tr><td><b>Пока что у вас нет покупок.</b> " +
+                        "<a href='Catalog.aspx' class='badge badge-info ml-2'>Посмотреть каталог</a></td></tr></tbody></table>");
                     container.Controls.Add(footer);
                 }
             }

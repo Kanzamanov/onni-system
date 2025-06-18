@@ -16,7 +16,7 @@ namespace UnitTestProject1
         [TestMethod]
         public void UpdateOrderStatus_ShouldChangeStatus()
         {
-            int testOrderItemId = 74;
+            int testOrderItemId = 90;
             string newStatus = "Dispatched";
 
             using (var conn = new SqlConnection(connectionString))

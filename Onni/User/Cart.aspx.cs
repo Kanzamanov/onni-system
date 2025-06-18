@@ -10,27 +10,32 @@ namespace Onni.User
 {
     public partial class Cart : System.Web.UI.Page
     {
+        // Переменные для подключения к БД и хранения данных
         SqlConnection con;
         SqlCommand cmd;
         SqlDataAdapter sda;
         DataTable dt;
-        decimal grandTotal = 0;
+        decimal grandTotal = 0; // общая сумма всех товаров в корзине
 
+        // Загрузка страницы
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
+                // Если пользователь не авторизован — перенаправляем на логин
                 if (Session["userId"] == null)
                 {
                     Response.Redirect("Login.aspx");
                 }
                 else
                 {
+                    // Загрузка корзины из базы данных
                     getCartItems();
                 }
             }
         }
 
+        // Загрузка товаров пользователя из корзины
         void getCartItems()
         {
             con = new SqlConnection(Connection.GetConnectionString());
@@ -38,24 +43,31 @@ namespace Onni.User
             cmd.Parameters.AddWithValue("@Action", "SELECT");
             cmd.Parameters.AddWithValue("@UserId", Session["userId"]);
             cmd.CommandType = CommandType.StoredProcedure;
+
             sda = new SqlDataAdapter(cmd);
             dt = new DataTable();
             sda.Fill(dt);
+
             rCartItem.DataSource = dt;
+
+            // Если корзина пуста — показываем специальный шаблон
             if (dt.Rows.Count == 0)
             {
                 rCartItem.FooterTemplate = null;
                 rCartItem.FooterTemplate = new CustomTemplate(ListItemType.Footer);
             }
+
             rCartItem.DataBind();
         }
 
+        // Обработка команд в Repeater'е: удалить товар или обновить количество
         protected void rCartItem_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
-            Utils utils = new Utils();
+            Utils utils = new Utils(); // Вспомогательные методы
 
             if (e.CommandName == "remove")
             {
+                // Удаление товара из корзины
                 con = new SqlConnection(Connection.GetConnectionString());
                 cmd = new SqlCommand("Cart_Crud", con);
                 cmd.Parameters.AddWithValue("@Action", "DELETE");
@@ -67,6 +79,8 @@ namespace Onni.User
                 {
                     con.Open();
                     cmd.ExecuteNonQuery();
+
+                    // Обновляем отображение корзины и счётчик
                     getCartItems();
                     Session["cartCount"] = utils.cartCount(Convert.ToInt32(Session["userId"]));
                 }
@@ -82,6 +96,7 @@ namespace Onni.User
 
             if (e.CommandName == "updateCart")
             {
+                // Обновление количества товаров в корзине
                 for (int item = 0; item < rCartItem.Items.Count; item++)
                 {
                     if (rCartItem.Items[item].ItemType == ListItemType.Item || rCartItem.Items[item].ItemType == ListItemType.AlternatingItem)
@@ -96,26 +111,32 @@ namespace Onni.User
 
                         if (quantityFromCart != quantityFromDB)
                         {
+                            // Обновляем количество только если оно изменилось
                             utils.updateCartQuantity(quantityFromCart, productId, Convert.ToInt32(Session["userId"]));
                         }
                     }
                 }
-                getCartItems();
+                getCartItems(); // Перезагружаем корзину
             }
         }
 
+        // Обработка оформления заказа
         protected void btnCheckout_Click(object sender, EventArgs e)
         {
-            lblMsg.Visible = false;  
+            lblMsg.Visible = false;
             List<CartItem> cartRows = new List<CartItem>();
+
+            // Считываем данные из Repeater
             foreach (RepeaterItem item in rCartItem.Items)
             {
                 if (item.ItemType != ListItemType.Item && item.ItemType != ListItemType.AlternatingItem)
                     continue;
+
                 int productId = int.Parse(((HiddenField)item.FindControl("hdnProductId")).Value);
                 int orderQty = int.Parse(((TextBox)item.FindControl("txtQuantity")).Text);
                 decimal price = decimal.Parse(((Label)item.FindControl("lblPrice")).Text);
                 string name = ((Label)item.FindControl("lblName")).Text;
+
                 cartRows.Add(new CartItem
                 {
                     ProductId = productId,
@@ -124,6 +145,8 @@ namespace Onni.User
                     Name = name
                 });
             }
+
+            // Проверка: пустая корзина
             if (cartRows.Count == 0)
             {
                 lblMsg.Visible = true;
@@ -132,7 +155,8 @@ namespace Onni.User
                 return;
             }
 
-            Dictionary<int, int> stock = new Dictionary<int, int>();  
+            // Получение остатков на складе
+            Dictionary<int, int> stock = new Dictionary<int, int>();
 
             using (SqlConnection con = new SqlConnection(Connection.GetConnectionString()))
             {
@@ -146,27 +170,28 @@ namespace Onni.User
                         stock[rdr.GetInt32(0)] = rdr.GetInt32(1);
             }
 
+            // Проверка наличия на складе
             string lackingName = null;
-
             foreach (CartItem r in cartRows)
             {
                 int available = stock.ContainsKey(r.ProductId) ? stock[r.ProductId] : 0;
-
                 if (r.OrderQty > available)
                 {
-                    lackingName = r.Name;              
+                    lackingName = r.Name;
                     break;
                 }
             }
 
-            if (lackingName != null)                   
+            if (lackingName != null)
             {
+                // Если товара не хватает — выводим предупреждение
                 lblMsg.Visible = true;
                 lblMsg.Text = $"Недостаточно товара <b>{lackingName}</b> на складе!";
                 lblMsg.CssClass = "alert alert-warning";
                 return;
             }
 
+            // Подготовка данных заказа для передачи на Payment.aspx
             DataTable dtItems = new DataTable();
             dtItems.Columns.Add("ProductId", typeof(int));
             dtItems.Columns.Add("Quantity", typeof(int));
@@ -179,15 +204,17 @@ namespace Onni.User
                 dr["ProductId"] = r.ProductId;
                 dr["Quantity"] = r.OrderQty;
                 dr["PriceAtPurchase"] = r.Price;
-                dr["Status"] = "Pending";
+                dr["Status"] = "Pending"; // по умолчанию
                 dtItems.Rows.Add(dr);
             }
 
+            // Сохраняем в сессии
             Session["orderItems"] = dtItems;
             Session["grandTotalPrice"] = cartRows.Sum(x => x.Price * x.OrderQty);
             Response.Redirect("Payment.aspx");
         }
 
+        // Класс для представления строки корзины
         private sealed class CartItem
         {
             public int ProductId { get; set; }
@@ -196,6 +223,7 @@ namespace Onni.User
             public string Name { get; set; }
         }
 
+        // Считаем сумму по каждой строке и общую сумму
         protected void rCartItem_ItemDataBound(object sender, RepeaterItemEventArgs e)
         {
             if (e.Item.ItemType == ListItemType.Item || e.Item.ItemType == ListItemType.AlternatingItem)
@@ -208,9 +236,12 @@ namespace Onni.User
                 totalPrice.Text = calTotalPrice.ToString();
                 grandTotal += calTotalPrice;
             }
+
+            // Сохраняем итоговую сумму в сессию
             Session["grandTotalPrice"] = grandTotal;
         }
 
+        // Кастомный шаблон футера Repeater'а, если корзина пуста
         private sealed class CustomTemplate : ITemplate
         {
             private ListItemType ListItemType { get; set; }

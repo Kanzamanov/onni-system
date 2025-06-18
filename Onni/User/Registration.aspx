@@ -92,9 +92,10 @@
 
                         <!-- Password -->
                         <div class="mb-3">
-                            <asp:RequiredFieldValidator ID="rfvPassword" runat="server" ErrorMessage="Требуется пароль"
-                                ControlToValidate="txtPassword" ForeColor="Red" Display="Dynamic" SetFocusOnError="true">
-                            </asp:RequiredFieldValidator>
+                            <asp:RequiredFieldValidator ID="rfvPassword" runat="server"
+                                ErrorMessage="Введите пароль"
+                                ControlToValidate="txtPassword" ForeColor="Red"
+                                Display="Dynamic" SetFocusOnError="true" />
                             <asp:TextBox ID="txtPassword" runat="server" CssClass="form-control" placeholder="Пароль"
                                 ToolTip="Password" TextMode="Password"></asp:TextBox>
                         </div>

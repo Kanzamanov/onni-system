@@ -129,10 +129,20 @@ namespace Onni.Admin
                     lblMsg.CssClass = "alert alert-success";
                     getCategories(); // Обновляет список категорий
                 }
-                catch (Exception ex)
+                catch (SqlException ex)
                 {
                     lblMsg.Visible = true;
-                    lblMsg.Text = "Ошибка: " + ex.Message;
+
+                    if (ex.Class == 16)
+                    {
+                        // RAISERROR из SQL (например: "Невозможно удалить: категория используется в товарах.")
+                        lblMsg.Text = "Ошибка: " + ex.Message;
+                    }
+                    else
+                    {
+                        lblMsg.Text = "Ошибка при удалении категории. Попробуйте позже.";
+                    }
+
                     lblMsg.CssClass = "alert alert-danger";
                 }
                 finally

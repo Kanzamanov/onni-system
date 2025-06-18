@@ -15,6 +15,16 @@ namespace Onni.User
         SqlCommand cmd;
         SqlDataAdapter sda;
         DataTable dt;
+        private string GetHash(string input)
+        {
+            using (var sha = System.Security.Cryptography.SHA256.Create())
+            {
+                var bytes = System.Text.Encoding.UTF8.GetBytes(input);
+                var hash = sha.ComputeHash(bytes);
+                return BitConverter.ToString(hash).Replace("-", "").ToLower();
+            }
+        }
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (Session["userId"] != null)
@@ -36,7 +46,7 @@ namespace Onni.User
             cmd = new SqlCommand("User_Crud", con);
             cmd.Parameters.AddWithValue("@Action", "SELECT4LOGIN");
             cmd.Parameters.AddWithValue("@Username", txtUsername.Text.Trim());
-            cmd.Parameters.AddWithValue("@Password", txtPassword.Text.Trim());
+            cmd.Parameters.AddWithValue("@Password", GetHash(txtPassword.Text.Trim()));
             cmd.CommandType = CommandType.StoredProcedure;
             sda = new SqlDataAdapter(cmd);
             dt = new DataTable();

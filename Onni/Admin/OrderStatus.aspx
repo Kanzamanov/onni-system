@@ -60,9 +60,12 @@
                                                                                 Eval("Status").ToString() == "Dispatched" ? "Отправлен" :
                                                                                 Eval("Status").ToString() == "Delivered" ? "Доставлен" :
                                                                                 Eval("Status").ToString() == "Cancelled"  ? "Отменён"    :
+                                                                                Eval("Status").ToString() == "Returned"  ? "Возврат" :
                                                                                 Eval("Status").ToString() %>'
                                                                         CssClass='<%# Eval("Status").ToString() == "Delivered" ? "badge badge-success" :
-                                                                            Eval("Status").ToString() == "Cancelled" ? "badge badge-secondary" : "badge badge-warning" %>'>
+                                                                            Eval("Status").ToString() == "Cancelled" ? "badge badge-secondary" : 
+                                                                            Eval("Status").ToString() == "Returned"  ? "badge badge-danger" :
+                                                                            "badge badge-warning" %>'>
                                                                     </asp:Label>
                                                                 </td>
                                                                 <td><%# Eval("Name") %></td>
@@ -107,6 +110,8 @@
                                                             <asp:ListItem Value="Pending">В ожидании</asp:ListItem>
                                                             <asp:ListItem Value="Dispatched">Отправлен</asp:ListItem>
                                                             <asp:ListItem Value="Delivered">Доставлен</asp:ListItem>
+                                                            <asp:ListItem Value="Returned">Возврат</asp:ListItem>
+                                                            <asp:ListItem Value="Cancelled" Enabled="false">Отменён</asp:ListItem>
                                                         </asp:DropDownList>
                                                         <asp:RequiredFieldValidator ID="rfvDdlOrderStatus" runat="server" ForeColor="Red"
                                                             ControlToValidate="ddlOrderStatus" ErrorMessage="Пожалуйста, выберите статус заказа"

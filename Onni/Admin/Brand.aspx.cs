@@ -148,14 +148,22 @@ namespace Onni.Admin
                     con.Open();
                     cmd.ExecuteNonQuery();
                     lblMsg.Visible = true;
-                    lblMsg.Text = "Бренд успешно удален!";
+                    lblMsg.Text = "Бренд успешно удалён!";
                     lblMsg.CssClass = "alert alert-success";
                     getBrands();
                 }
-                catch (Exception ex)
+                catch (SqlException ex)
                 {
                     lblMsg.Visible = true;
-                    lblMsg.Text = "Ошибка - " + ex.Message;
+                    if (ex.Class == 16)
+                    {
+                        lblMsg.Text = "Ошибка - " + ex.Message;
+                    }
+                    else
+                    {
+                        lblMsg.Text = "Ошибка при удалении бренда. Пожалуйста, попробуйте позже.";
+                    }
+
                     lblMsg.CssClass = "alert alert-danger";
                 }
                 finally

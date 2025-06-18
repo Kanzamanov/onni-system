@@ -249,12 +249,22 @@ namespace Onni.Admin
                     lblMsg.Visible = true;
                     lblMsg.Text = "Товар успешно удалён!";
                     lblMsg.CssClass = "alert alert-success";
-                    getProducts(); 
+                    getProducts();
                 }
-                catch (Exception ex)
+                catch (SqlException ex)
                 {
                     lblMsg.Visible = true;
-                    lblMsg.Text = "Ошибка: " + ex.Message;
+
+                    // RAISERROR от SQL Server (Class = 16 — пользовательская ошибка)
+                    if (ex.Class == 16)
+                    {
+                        lblMsg.Text = "Ошибка: " + ex.Message;
+                    }
+                    else
+                    {
+                        lblMsg.Text = "Произошла ошибка при удалении товара. Попробуйте позже.";
+                    }
+
                     lblMsg.CssClass = "alert alert-danger";
                 }
                 finally

@@ -111,7 +111,7 @@
                             <a class="mobile-menu" id="mobile-collapse" href="#!">
                                 <i class="ti-menu"></i>
                             </a>
-                           <%-- <a href="index.html">
+                            <%-- <a href="index.html">
                                 <img class="img-fluid" src="../assets/images/logo.png" alt="Theme-Logo" />
                             </a>--%>
                             <a class="mobile-options">
@@ -235,6 +235,16 @@
                                         <a href="Report.aspx">
                                             <span class="pcoded-micon"><i class="ti-layers"></i><b>FC</b></span>
                                             <span class="pcoded-mtext" data-i18n="nav.menu-levels.main">Отчет о продаже</span>
+                                            <span class="pcoded-mcaret"></span>
+                                        </a>
+                                    </li>
+                                </ul>
+
+                                <ul class="pcoded-item pcoded-left-item">
+                                    <li>
+                                        <a href="Analytics.aspx">
+                                            <span class="pcoded-micon"><i class="ti-layers"></i><b>FC</b></span>
+                                            <span class="pcoded-mtext" data-i18n="nav.menu-levels.main">Аналитика</span>
                                             <span class="pcoded-mcaret"></span>
                                         </a>
                                     </li>

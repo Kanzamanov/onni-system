@@ -85,7 +85,7 @@
                                             </asp:RequiredFieldValidator>
 
                                             <asp:RegularExpressionValidator ID="RegularExpressionValidator1" runat="server"
-                                                ErrorMessage="Name must be in characters" ForeColor="Red" Display="Dynamic" SetFocusOnError="true"
+                                                ErrorMessage="Имя должно быть указано в символах" ForeColor="Red" Display="Dynamic" SetFocusOnError="true"
                                                 ValidationExpression="^[a-zA-Z\s]+$" ControlToValidate="txtName" ValidationGroup="card">
                                                 *
                                             </asp:RegularExpressionValidator>
@@ -102,7 +102,7 @@
                                             </asp:RequiredFieldValidator>
 
                                             <asp:RegularExpressionValidator ID="RegularExpressionValidator2" runat="server"
-                                                ErrorMessage="Card Number must be of 16 digits" ForeColor="Red" Display="Dynamic" SetFocusOnError="true"
+                                                ErrorMessage="Номер карты должен состоять из 16 цифр" ForeColor="Red" Display="Dynamic" SetFocusOnError="true"
                                                 ValidationExpression="[0-9]{16}" ControlToValidate="txtCardNo" ValidationGroup="card">
                                                 *
                                             </asp:RegularExpressionValidator>
@@ -134,7 +134,7 @@
                                                     </asp:RequiredFieldValidator>
 
                                                     <asp:RegularExpressionValidator ID="RegularExpressionValidator3" runat="server" Display="Dynamic"
-                                                        ErrorMessage="Expiry month must be of 2 digits" ForeColor="Red" SetFocusOnError="true"
+                                                        ErrorMessage="Месяц истечения срока должен состоять из 2 цифр" ForeColor="Red" SetFocusOnError="true"
                                                         ValidationExpression="[0-9]{2}" ControlToValidate="txtExpMonth" ValidationGroup="card">
                                                         *
                                                     </asp:RegularExpressionValidator>
@@ -145,7 +145,7 @@
                                                     </asp:RequiredFieldValidator>
 
                                                     <asp:RegularExpressionValidator ID="RegularExpressionValidator4" runat="server" Display="Dynamic"
-                                                        ErrorMessage="Expiry year must be of 4 digits" ForeColor="Red" SetFocusOnError="true"
+                                                        ErrorMessage="Год истечения срока должен состоять из 4 цифр" ForeColor="Red" SetFocusOnError="true"
                                                         ValidationExpression="[0-9]{4}" ControlToValidate="txtExpYear" ValidationGroup="card">
                                                         *
                                                     </asp:RegularExpressionValidator>
@@ -171,7 +171,7 @@
                                                     </asp:RequiredFieldValidator>
 
                                                     <asp:RegularExpressionValidator ID="RegularExpressionValidator5" runat="server" Display="Dynamic"
-                                                        ErrorMessage="CVV no. must be of 3 digits" ForeColor="Red" SetFocusOnError="true"
+                                                        ErrorMessage="Номер CVV должен состоять из 3 цифр" ForeColor="Red" SetFocusOnError="true"
                                                         ValidationExpression="[0-9]{3}" ControlToValidate="txtCvv" ValidationGroup="card">
                                                         *
                                                     </asp:RegularExpressionValidator>
